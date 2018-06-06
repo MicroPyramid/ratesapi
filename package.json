@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^3.0.7"
+    "mongodb": "^3.0.7",
+    "nodemon": "^1.17.5"
   }
 }

@@ -63,7 +63,7 @@ http.createServer(function (req, res) {
           var db = dbo.db("currency");
           var collection = db.collection('prices');
             fields = {base:1, date:1, _id:0, rates: 1}
-            query = {'base': "EUR", 'date': req.url.split('/api/')[1].split('?')[0].toString()}
+            query = {'base': "EUR", 'date': { $lte: req.url.split('/api/')[1].split('?')[0].toString() } }
             if(q.query['base']){
                 query['base']= q.query['base'].toUpperCase()
             }
@@ -75,8 +75,10 @@ http.createServer(function (req, res) {
                     fields[symbol] = 1;
                 }
             }
-          var cursor = collection.find(query, {fields: fields}).toArray(function(err, result) {
-            if (err) throw err;
+          var cursor = collection.find(query, {fields: fields}).sort({date: -1}).toArray(function(err, result) {
+            if (err){
+                throw err;
+            }
             dbo.close();
             if(result[0]){
                 res.writeHead(200, {'Content-Type': 'text/json'});
