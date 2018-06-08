@@ -19,7 +19,10 @@ for s in itemlist:
         cur.append(str(s.attributes['currency'].value))
         rates.append(float(s.attributes['rate'].value))
     except:
-        pass
+        try:
+            rates.remove(float(s.attributes['rate'].value))
+        except:
+            pass
 
 for s in itemlist:
     try:

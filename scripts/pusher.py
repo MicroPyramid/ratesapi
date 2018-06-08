@@ -12,20 +12,19 @@ codes = ['USD', 'JPY', 'BGN', 'CYP', 'CZK', 'DKK', 'EEK', 'GBP', 'HUF', 'LTL', '
          'NZD', 'PHP', 'SGD', 'THB', 'ZAR']
 
 
-def get_cleaned(line, codes):
+def get_cleaned(line, codes, date):
     i = 0
     new_line = []
     new_codes = []
-    del line[0]
+    if not date:
+        del line[0]
     del line[-1]
-
     for x in line:
         if x != 'N/A':
             new_codes.append(codes[i])
             new_line.append(line[i])
 
         i += 1
-
     return new_line, new_codes
 
 
@@ -68,17 +67,17 @@ with open('eurofxref-hist.csv', 'rb') as csvfile:
     x = 0
     for row in spamreader:
         date = row[0]
-        new_line, new_codes = get_cleaned(row, codes)
+        new_line, new_codes = get_cleaned(row, codes, '')
 
         if x == 0:
             x += 1
             continue
 
         #  for EUR
-        eur_new_line, eur_new_codes = get_cleaned(row[:], codes[:])
 
+        eur_new_line, eur_new_codes = get_cleaned(row[:], codes[:], date)
         eur_ = dict_gen(eur_new_line, currency="EUR", currency_codes=eur_new_codes, date=date)
-        print (json.dumps(eur_))
+
         db_prices.insert_one(eur_)
         #  end EUR block
 
