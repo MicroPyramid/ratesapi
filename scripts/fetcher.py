@@ -20,7 +20,7 @@ for s in itemlist:
         rates.append(float(s.attributes['rate'].value))
     except:
         try:
-            rates.remove(float(s.attributes['rate'].value))
+            rates.remove(float(s.attributes['currency'].value))
         except:
             pass
 
